@@ -49,6 +49,18 @@ public class GenericReportGenerator {
      * @return Generic report object
      */
     public GenericReport convert(OwaspReport owaspReport, String wildflyVersion) {
+        return convert(owaspReport, wildflyVersion, false);
+    }
+
+    /**
+     * Convert OWASP report to generic format.
+     *
+     * @param owaspReport The parsed OWASP report
+     * @param wildflyVersion The WildFly version being scanned
+     * @param skipSuppressed Whether to skip suppressed CVEs from the output
+     * @return Generic report object
+     */
+    public GenericReport convert(OwaspReport owaspReport, String wildflyVersion, boolean skipSuppressed) {
         if (owaspReport == null) {
             throw new IllegalArgumentException("OWASP report cannot be null");
         }
@@ -59,7 +71,7 @@ public class GenericReportGenerator {
         GenericReport report = new GenericReport();
         report.setSchemaVersion("1.0");
         report.setMetadata(buildMetadata(owaspReport, wildflyVersion));
-        report.setVulnerabilities(buildVulnerabilities(owaspReport));
+        report.setVulnerabilities(buildVulnerabilities(owaspReport, skipSuppressed));
         report.setSummary(calculateSummary(report.getVulnerabilities()));
         return report;
     }
@@ -119,7 +131,7 @@ public class GenericReportGenerator {
     /**
      * Build vulnerabilities list from OWASP dependencies.
      */
-    private List<Vulnerability> buildVulnerabilities(OwaspReport owaspReport) {
+    private List<Vulnerability> buildVulnerabilities(OwaspReport owaspReport, boolean skipSuppressed) {
         List<Vulnerability> vulnerabilities = new ArrayList<>();
 
         if (owaspReport.getDependencies() == null) {
@@ -134,8 +146,8 @@ public class GenericReportGenerator {
                 }
             }
 
-            // Process suppressed vulnerabilities
-            if (dep.getSuppressedVulnerabilities() != null) {
+            // Process suppressed vulnerabilities (only if not skipping)
+            if (!skipSuppressed && dep.getSuppressedVulnerabilities() != null) {
                 for (OwaspVulnerability owaspVuln : dep.getSuppressedVulnerabilities()) {
                     vulnerabilities.add(mapVulnerability(owaspVuln, dep, true));
                 }

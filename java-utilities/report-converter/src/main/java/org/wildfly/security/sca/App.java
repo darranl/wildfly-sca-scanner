@@ -45,11 +45,13 @@ public class App {
             Path inputPath = Paths.get(cmd.getOptionValue("input"));
             Path outputPath = Paths.get(cmd.getOptionValue("output"));
             String version = cmd.getOptionValue("version");
+            boolean skipSuppressed = cmd.hasOption("skip-suppressed");
 
             System.out.println("Starting conversion...");
             System.out.println("Input: " + inputPath);
             System.out.println("Output: " + outputPath);
             System.out.println("WildFly Version: " + version);
+            System.out.println("Skip Suppressed CVEs: " + skipSuppressed);
 
             // Parse OWASP report
             OwaspReportParser reportParser = new OwaspReportParser();
@@ -60,7 +62,7 @@ public class App {
 
             // Generate generic report
             GenericReportGenerator generator = new GenericReportGenerator();
-            GenericReport genericReport = generator.convert(owaspReport, version);
+            GenericReport genericReport = generator.convert(owaspReport, version, skipSuppressed);
             generator.writeToFile(genericReport, outputPath);
 
             System.out.println("Conversion complete!");
@@ -124,6 +126,11 @@ public class App {
         options.addOption(Option.builder()
                 .longOpt("verbose")
                 .desc("Enable verbose logging")
+                .build());
+
+        options.addOption(Option.builder()
+                .longOpt("skip-suppressed")
+                .desc("Skip suppressed CVEs from the output report")
                 .build());
 
         options.addOption(Option.builder("h")

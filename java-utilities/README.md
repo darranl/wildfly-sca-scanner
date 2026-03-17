@@ -107,15 +107,40 @@ Converts OWASP Dependency Check JSON reports to a generic, tool-agnostic JSON fo
 - Custom reporting tools
 - Multi-tool aggregation
 
-**Main Class**: `org.wildfly.security.sca.reportconverter.Main`
+**Main Class**: `org.wildfly.security.sca.App`
 
-**Usage** (once implemented):
+**Features**:
+- Parses OWASP Dependency Check JSON reports
+- Generates standardized generic JSON format
+- Handles CVSS v2, v3, and v4 scores
+- Tracks both active and suppressed vulnerabilities
+- **Optional suppression filtering** - Skip suppressed CVEs to reduce report size
+- Calculates summary statistics
+
+**Basic Usage**:
 ```bash
-java -jar report-converter/target/report-converter-1.0.0-SNAPSHOT.jar \
+java -jar report-converter/target/report-converter.jar \
   --input dependency-check-report.json \
   --output wildfly-36.0.1.Final-cve-report.json \
   --version 36.0.1.Final
 ```
+
+**Skip Suppressed CVEs** (reduces report size):
+```bash
+java -jar report-converter/target/report-converter.jar \
+  --input dependency-check-report.json \
+  --output wildfly-36.0.1.Final-cve-report.json \
+  --version 36.0.1.Final \
+  --skip-suppressed
+```
+
+**Options**:
+- `--input, -i` - Path to OWASP JSON report (required)
+- `--output, -o` - Path for output generic JSON (required)
+- `--version, -v` - WildFly version being scanned (required)
+- `--skip-suppressed` - Skip suppressed CVEs from output (optional)
+- `--verbose` - Enable verbose logging (optional)
+- `--help, -h` - Display help message (optional)
 
 ### Suppression Converter
 
