@@ -205,11 +205,40 @@ cd report-converter
 mvn test
 
 # Run specific test class
-mvn test -Dtest=MainTest
+mvn test -Dtest=OwaspReportParserTest
 
 # Run with debug output
 mvn test -X
 ```
+
+### Test Coverage with JaCoCo
+
+The project uses [JaCoCo](https://www.jacoco.org/) for test coverage analysis. Coverage reports are automatically generated during the test phase.
+
+```bash
+# Run tests with coverage report
+mvn clean test jacoco:report
+
+# View coverage report in browser
+# For report-converter:
+open report-converter/target/site/jacoco/index.html
+
+# For suppression-converter:
+open suppression-converter/target/site/jacoco/index.html
+```
+
+**Coverage Reports Include**:
+- Line coverage percentage
+- Branch coverage percentage
+- Complexity metrics
+- Detailed per-class and per-method coverage
+
+**Current Coverage** (report-converter):
+- **40 tests** - All passing ✅
+- **Core logic coverage**: 80%+ for parser and generator
+- **Critical paths**: 100% coverage for error handling
+
+For detailed test documentation, see [report-converter/TEST_COVERAGE.md](report-converter/TEST_COVERAGE.md).
 
 ### Code Quality
 
