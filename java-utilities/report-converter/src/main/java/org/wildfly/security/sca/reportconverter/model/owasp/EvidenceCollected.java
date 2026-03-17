@@ -1,3 +1,7 @@
+/*
+ * Copyright The WildFly Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package org.wildfly.security.sca.reportconverter.model.owasp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,7 +12,7 @@ import java.util.List;
 /**
  * Evidence collected during OWASP scan (we don't need to parse this in detail).
  *
- * @author WildFly Security Team
+ * @author <a href="mailto:darran.lofthouse@jboss.com">Darran Lofthouse</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EvidenceCollected {

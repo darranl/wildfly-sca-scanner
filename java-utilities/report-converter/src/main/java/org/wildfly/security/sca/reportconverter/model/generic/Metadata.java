@@ -1,3 +1,7 @@
+/*
+ * Copyright The WildFly Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package org.wildfly.security.sca.reportconverter.model.generic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +11,7 @@ import java.util.List;
 /**
  * Metadata for the generic CVE report.
  *
- * @author WildFly Security Team
+ * @author <a href="mailto:darran.lofthouse@jboss.com">Darran Lofthouse</a>
  */
 public class Metadata {
 

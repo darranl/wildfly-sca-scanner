@@ -1,3 +1,7 @@
+/*
+ * Copyright The WildFly Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package org.wildfly.security.sca.reportconverter.model.owasp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -6,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Reference link for a vulnerability.
  *
- * @author WildFly Security Team
+ * @author <a href="mailto:darran.lofthouse@jboss.com">Darran Lofthouse</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Reference {
