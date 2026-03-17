@@ -1,0 +1,66 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "12.0.0",
+    "dataSource": [
+      {
+        "name": "NVD API Last Checked",
+        "timestamp": "2026-03-17T06:00:00Z"
+      }
+    ]
+  },
+  "projectInfo": {
+    "name": "Test Project",
+    "reportDate": "2026-03-17T07:00:00Z",
+    "credits": {
+      "NVD": "This product uses the NVD API but is not endorsed or certified by the NVD."
+    }
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "test-library-1.0.0.jar",
+      "filePath": "/path/to/test-library-1.0.0.jar",
+      "md5": "abc123",
+      "sha1": "def456",
+      "sha256": "ghi789",
+      "description": "Test library for unit testing",
+      "license": "Apache-2.0",
+      "packages": [
+        {
+          "id": "pkg:maven/com.example:test-library@1.0.0",
+          "confidence": "HIGH",
+          "url": "https://example.com/test-library"
+        }
+      ],
+      "vulnerabilities": [
+        {
+          "source": "NVD",
+          "name": "CVE-2024-12345",
+          "severity": "HIGH",
+          "cvssv3": {
+            "baseScore": 7.5,
+            "attackVector": "NETWORK",
+            "attackComplexity": "LOW",
+            "privilegesRequired": "NONE",
+            "userInteraction": "NONE",
+            "scope": "UNCHANGED",
+            "confidentialityImpact": "HIGH",
+            "integrityImpact": "NONE",
+            "availabilityImpact": "NONE",
+            "baseSeverity": "HIGH"
+          },
+          "cwes": ["CWE-79"],
+          "description": "A test vulnerability for unit testing. This is a sample description that should be extracted as the title.",
+          "references": [
+            {
+              "source": "NVD",
+              "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-12345",
+              "name": "CVE-2024-12345"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

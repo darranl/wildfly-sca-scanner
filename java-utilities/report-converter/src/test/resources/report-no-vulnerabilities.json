@@ -1,0 +1,53 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "12.0.0",
+    "dataSource": [
+      {
+        "name": "NVD API Last Checked",
+        "timestamp": "2026-03-17T06:00:00Z"
+      }
+    ]
+  },
+  "projectInfo": {
+    "name": "Clean Project",
+    "reportDate": "2026-03-17T07:00:00Z",
+    "credits": {
+      "NVD": "This product uses the NVD API but is not endorsed or certified by the NVD."
+    }
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "safe-library-1.0.0.jar",
+      "filePath": "/path/to/safe-library-1.0.0.jar",
+      "md5": "abc123",
+      "sha1": "def456",
+      "sha256": "ghi789",
+      "description": "A safe library with no known vulnerabilities",
+      "license": "Apache-2.0",
+      "packages": [
+        {
+          "id": "pkg:maven/com.example:safe-library@1.0.0",
+          "confidence": "HIGH"
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "another-safe-lib-2.0.0.jar",
+      "filePath": "/path/to/another-safe-lib-2.0.0.jar",
+      "md5": "xyz789",
+      "sha1": "uvw456",
+      "sha256": "rst123",
+      "description": "Another safe library",
+      "license": "MIT",
+      "packages": [
+        {
+          "id": "pkg:maven/com.example:another-safe-lib@2.0.0",
+          "confidence": "HIGH"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "12.0.0"
+  },
+  "projectInfo": {
+    "name": "Malformed Report",
+    "reportDate": "2026-03-17T07:00:00Z"
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "test.jar",
+      "vulnerabilities": [
+        {
+          "source": "NVD",
+          "name": "CVE-2024-99999"
+          // Missing closing brace - this makes it invalid JSON

@@ -1,0 +1,146 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "12.0.0",
+    "dataSource": [
+      {
+        "name": "NVD API Last Checked",
+        "timestamp": "2026-03-17T06:00:00Z"
+      }
+    ]
+  },
+  "projectInfo": {
+    "name": "Test Project with Multiple CVSS Versions",
+    "reportDate": "2026-03-17T07:00:00Z",
+    "credits": {
+      "NVD": "This product uses the NVD API but is not endorsed or certified by the NVD."
+    }
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "multi-cvss-lib-1.0.0.jar",
+      "filePath": "/path/to/multi-cvss-lib-1.0.0.jar",
+      "md5": "abc123",
+      "sha1": "def456",
+      "sha256": "ghi789",
+      "packages": [
+        {
+          "id": "pkg:maven/com.example:multi-cvss-lib@1.0.0",
+          "confidence": "HIGH"
+        }
+      ],
+      "vulnerabilities": [
+        {
+          "source": "NVD",
+          "name": "CVE-2020-11111",
+          "severity": "HIGH",
+          "cvssv2": {
+            "score": 7.5,
+            "accessVector": "NETWORK",
+            "accessComplexity": "LOW",
+            "authentication": "NONE",
+            "confidentialityImpact": "PARTIAL",
+            "integrityImpact": "PARTIAL",
+            "availabilityImpact": "PARTIAL",
+            "severity": "HIGH"
+          },
+          "cwes": ["CWE-89"],
+          "description": "SQL injection vulnerability (CVSSv2 only).",
+          "references": [
+            {
+              "source": "NVD",
+              "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-11111",
+              "name": "CVE-2020-11111"
+            }
+          ]
+        },
+        {
+          "source": "NVD",
+          "name": "CVE-2023-22222",
+          "severity": "CRITICAL",
+          "cvssv3": {
+            "baseScore": 9.1,
+            "attackVector": "NETWORK",
+            "attackComplexity": "LOW",
+            "privilegesRequired": "NONE",
+            "userInteraction": "NONE",
+            "scope": "UNCHANGED",
+            "confidentialityImpact": "HIGH",
+            "integrityImpact": "HIGH",
+            "availabilityImpact": "NONE",
+            "baseSeverity": "CRITICAL"
+          },
+          "cwes": ["CWE-78"],
+          "description": "Command injection vulnerability (CVSSv3 only).",
+          "references": [
+            {
+              "source": "NVD",
+              "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-22222",
+              "name": "CVE-2023-22222"
+            }
+          ]
+        },
+        {
+          "source": "NVD",
+          "name": "CVE-2024-33333",
+          "severity": "HIGH",
+          "cvssv2": {
+            "score": 6.8,
+            "accessVector": "NETWORK",
+            "accessComplexity": "MEDIUM",
+            "authentication": "NONE",
+            "confidentialityImpact": "PARTIAL",
+            "integrityImpact": "PARTIAL",
+            "availabilityImpact": "PARTIAL",
+            "severity": "MEDIUM"
+          },
+          "cvssv3": {
+            "baseScore": 8.1,
+            "attackVector": "NETWORK",
+            "attackComplexity": "HIGH",
+            "privilegesRequired": "NONE",
+            "userInteraction": "NONE",
+            "scope": "UNCHANGED",
+            "confidentialityImpact": "HIGH",
+            "integrityImpact": "HIGH",
+            "availabilityImpact": "HIGH",
+            "baseSeverity": "HIGH"
+          },
+          "cwes": ["CWE-22"],
+          "description": "Path traversal vulnerability (both CVSSv2 and CVSSv3). Should prefer v3 score.",
+          "references": [
+            {
+              "source": "NVD",
+              "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-33333",
+              "name": "CVE-2024-33333"
+            }
+          ]
+        },
+        {
+          "source": "NVD",
+          "name": "CVE-2025-44444",
+          "severity": "MEDIUM",
+          "cvssv4": {
+            "baseScore": 6.9,
+            "attackVector": "NETWORK",
+            "attackComplexity": "LOW",
+            "privilegesRequired": "LOW",
+            "userInteraction": "NONE",
+            "vectorString": "CVSS:4.0/AV:N/AC:L/PR:L/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N",
+            "baseSeverity": "MEDIUM"
+          },
+          "cwes": ["CWE-200"],
+          "description": "Information disclosure (CVSSv4 only).",
+          "references": [
+            {
+              "source": "NVD",
+              "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-44444",
+              "name": "CVE-2025-44444"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

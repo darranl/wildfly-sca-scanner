@@ -1,0 +1,118 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "12.0.0",
+    "dataSource": [
+      {
+        "name": "NVD API Last Checked",
+        "timestamp": "2026-03-17T06:00:00Z"
+      }
+    ]
+  },
+  "projectInfo": {
+    "name": "Test Project with Suppressions",
+    "reportDate": "2026-03-17T07:00:00Z",
+    "credits": {
+      "NVD": "This product uses the NVD API but is not endorsed or certified by the NVD."
+    }
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "vulnerable-lib-2.0.0.jar",
+      "filePath": "/path/to/vulnerable-lib-2.0.0.jar",
+      "md5": "abc123",
+      "sha1": "def456",
+      "sha256": "ghi789",
+      "packages": [
+        {
+          "id": "pkg:maven/com.example:vulnerable-lib@2.0.0",
+          "confidence": "HIGH"
+        }
+      ],
+      "vulnerabilities": [
+        {
+          "source": "NVD",
+          "name": "CVE-2024-11111",
+          "severity": "CRITICAL",
+          "cvssv3": {
+            "baseScore": 9.8,
+            "attackVector": "NETWORK",
+            "attackComplexity": "LOW",
+            "privilegesRequired": "NONE",
+            "userInteraction": "NONE",
+            "scope": "UNCHANGED",
+            "confidentialityImpact": "HIGH",
+            "integrityImpact": "HIGH",
+            "availabilityImpact": "HIGH",
+            "baseSeverity": "CRITICAL"
+          },
+          "cwes": ["CWE-502"],
+          "description": "Critical remote code execution vulnerability.",
+          "references": [
+            {
+              "source": "NVD",
+              "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-11111",
+              "name": "CVE-2024-11111"
+            }
+          ]
+        },
+        {
+          "source": "NVD",
+          "name": "CVE-2024-22222",
+          "severity": "MEDIUM",
+          "cvssv3": {
+            "baseScore": 5.3,
+            "attackVector": "NETWORK",
+            "attackComplexity": "LOW",
+            "privilegesRequired": "NONE",
+            "userInteraction": "NONE",
+            "scope": "UNCHANGED",
+            "confidentialityImpact": "LOW",
+            "integrityImpact": "NONE",
+            "availabilityImpact": "NONE",
+            "baseSeverity": "MEDIUM"
+          },
+          "cwes": ["CWE-200"],
+          "description": "Information disclosure vulnerability.",
+          "references": [
+            {
+              "source": "NVD",
+              "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-22222",
+              "name": "CVE-2024-22222"
+            }
+          ]
+        }
+      ],
+      "suppressedVulnerabilities": [
+        {
+          "source": "NVD",
+          "name": "CVE-2024-33333",
+          "severity": "LOW",
+          "cvssv3": {
+            "baseScore": 3.7,
+            "attackVector": "NETWORK",
+            "attackComplexity": "HIGH",
+            "privilegesRequired": "NONE",
+            "userInteraction": "NONE",
+            "scope": "UNCHANGED",
+            "confidentialityImpact": "LOW",
+            "integrityImpact": "NONE",
+            "availabilityImpact": "NONE",
+            "baseSeverity": "LOW"
+          },
+          "cwes": ["CWE-400"],
+          "description": "Denial of service vulnerability with low impact.",
+          "notes": "Suppressed: Not applicable to WildFly usage pattern. The vulnerable code path is never executed in our deployment.",
+          "references": [
+            {
+              "source": "NVD",
+              "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-33333",
+              "name": "CVE-2024-33333"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
