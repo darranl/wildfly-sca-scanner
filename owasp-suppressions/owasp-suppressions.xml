@@ -411,4 +411,19 @@
     <packageUrl regex="true">^pkg:maven/org\.wildfly\.core/.*@.*$</packageUrl>
     <cve>CVE-2025-23368</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: grpc-api-1.70.0.jar
+
+    False positive: This CVE affects gRPC-Go (Go language implementation), not grpc-api (Java implementation).
+    WildFly uses the Java gRPC library which is a separate codebase from gRPC-Go.
+
+    CVE-2026-33186 explicitly targets: cpe:2.3:a:grpc:grpc:*:*:*:*:*:go:*:*
+    Our dependency is: pkg:maven/io.grpc/grpc-api (Java/Maven)
+
+    https://github.com/grpc/grpc-go/security/advisories/GHSA-p77j-4mvh-x3m3
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.grpc/grpc-api@.*$</packageUrl>
+    <cve>CVE-2026-33186</cve>
+  </suppress>
 </suppressions>
