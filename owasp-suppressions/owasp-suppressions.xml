@@ -16,6 +16,30 @@
    </suppress>
    <suppress>
       <notes><![CDATA[
+      file name: grpc-api-1.70.0.jar
+
+      WildFly uses the Java gRPC library (pkg:maven/io.grpc/grpc-api) which should not be mapped to
+      gRPC-Go CPEs. The Java and Go implementations are separate codebases with different vulnerabilities.
+
+      Suppressing: cpe:2.3:a:grpc:grpc:*:*:*:*:*:go:*:* (note the :go: platform indicator)
+      ]]></notes>
+      <packageUrl regex="true">^pkg:maven/io\.grpc/grpc-api@.*$</packageUrl>
+      <cpe>cpe:/a:grpc:grpc</cpe>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
+      file name: opentelemetry-proto-1.5.0-alpha.jar, opentelemetry-semconv-1.32.0.jar, etc.
+
+      WildFly uses Java OpenTelemetry libraries (pkg:maven/io.opentelemetry.*) which should not be mapped to
+      OpenTelemetry-Go CPEs. The Java and Go implementations are separate codebases with different vulnerabilities.
+
+      Suppressing: cpe:2.3:a:opentelemetry:opentelemetry:*:*:*:*:*:go:*:* (note the :go: platform indicator)
+      ]]></notes>
+      <packageUrl regex="true">^pkg:maven/io\.opentelemetry\..*@.*$</packageUrl>
+      <cpe>cpe:/a:opentelemetry:opentelemetry</cpe>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
       file name: jakarta-client-resteasy-3.0.3.Final.jar
       ]]></notes>
       <packageUrl regex="true">^pkg:maven/org\.wildfly\.security\.jakarta/jakarta\-client\-resteasy@.*$</packageUrl>
@@ -422,20 +446,5 @@
     ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.wildfly\.core/.*@.*$</packageUrl>
     <cve>CVE-2025-23368</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[
-    file name: grpc-api-1.70.0.jar
-
-    False positive: This CVE affects gRPC-Go (Go language implementation), not grpc-api (Java implementation).
-    WildFly uses the Java gRPC library which is a separate codebase from gRPC-Go.
-
-    CVE-2026-33186 explicitly targets: cpe:2.3:a:grpc:grpc:*:*:*:*:*:go:*:*
-    Our dependency is: pkg:maven/io.grpc/grpc-api (Java/Maven)
-
-    https://github.com/grpc/grpc-go/security/advisories/GHSA-p77j-4mvh-x3m3
-    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/io\.grpc/grpc-api@.*$</packageUrl>
-    <cve>CVE-2026-33186</cve>
   </suppress>
 </suppressions>
