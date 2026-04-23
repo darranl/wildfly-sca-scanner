@@ -398,4 +398,17 @@
     <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j-api@.*$</packageUrl>
     <cve>CVE-2025-68161</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: launcher.jar
+
+    [WFCORE-7192] Fixed in WildFly Core 32.0.0.Beta3 and 31.0.3.Final.
+    WildFly main is on 32.0.0.Beta7+.
+
+    https://github.com/wildfly-security/wildfly-sca-scanner/issues/46
+    https://github.com/wildfly/wildfly-core/security/advisories/GHSA-qhp6-6p8p-2rqh
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.wildfly\.core/.*@.*$</packageUrl>
+    <cve>CVE-2025-23368</cve>
+  </suppress>
 </suppressions>
