@@ -4,6 +4,18 @@
    <!-- Sometimes the mapping from GAV to CPE creates a bad match, this section supresses those matches. -->
    <suppress>
       <notes><![CDATA[
+      file name: installation-manager-api-1.2.1.Final.jar
+
+      WildFly Installation Manager API is being incorrectly mapped to IBM Installation Manager and IBM Rational ClearCase.
+      The POM contains developer metadata pointing to IBM (developer org), causing the scanner to incorrectly
+      associate this with IBM products. This is WildFly's own installation manager API, not IBM's product.
+      ]]></notes>
+      <packageUrl regex="true">^pkg:maven/org\.wildfly\.installation\-manager/installation\-manager\-api@.*$</packageUrl>
+      <cpe>cpe:/a:ibm:installation_manager</cpe>
+      <cpe>cpe:/a:ibm:rational_clearcase</cpe>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
       file name: jakarta-client-resteasy-3.0.3.Final.jar
       ]]></notes>
       <packageUrl regex="true">^pkg:maven/org\.wildfly\.security\.jakarta/jakarta\-client\-resteasy@.*$</packageUrl>
