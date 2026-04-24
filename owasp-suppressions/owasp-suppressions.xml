@@ -6,13 +6,19 @@
       <notes><![CDATA[
       file name: installation-manager-api-1.2.1.Final.jar
 
-      WildFly Installation Manager API is being incorrectly mapped to IBM Installation Manager and IBM Rational ClearCase.
-      The POM contains developer metadata pointing to IBM (developer org), causing the scanner to incorrectly
-      associate this with IBM products. This is WildFly's own installation manager API, not IBM's product.
+      WildFly Installation Manager API is being incorrectly mapped to multiple unrelated products:
+      - IBM Installation Manager (CVE-2009-3518)
+      - IBM Rational ClearCase (CVE-2014-6134)
+      - Red Hat Developer Hub (CVE-2023-6944)
+
+      The POM contains developer metadata pointing to IBM (developer org), and the version number (1.2.1)
+      matches RHDH versions, causing the scanner to incorrectly associate this with these products.
+      This is WildFly's own installation manager API, not IBM or RHDH products.
       ]]></notes>
       <packageUrl regex="true">^pkg:maven/org\.wildfly\.installation\-manager/installation\-manager\-api@.*$</packageUrl>
       <cpe>cpe:/a:ibm:installation_manager</cpe>
       <cpe>cpe:/a:ibm:rational_clearcase</cpe>
+      <cpe>cpe:/a:redhat:red_hat_developer_hub</cpe>
    </suppress>
    <suppress>
       <notes><![CDATA[
