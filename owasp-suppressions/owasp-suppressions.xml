@@ -469,4 +469,23 @@
     <packageUrl regex="true">^pkg:maven/org\.wildfly\.core/.*@.*$</packageUrl>
     <cve>CVE-2025-23368</cve>
   </suppress>
+  <suppress until="2027-05-01">
+    <notes><![CDATA[
+    file name: log4j-api-2.23.1.jar
+
+    [Issue #59] WildFly only includes log4j-api (the API layer), not the affected implementation components.
+    - CVE-2026-34478: Log injection in Rfc5424Layout (affects log4j-core only)
+    - CVE-2026-34480: Silent log event loss in XmlLayout (affects log4j-core only)
+    - CVE-2026-34481: Invalid JSON from JsonTemplateLayout (affects log4j-layout-template-json only)
+
+    WildFly does not use log4j-core or log4j-layout-template-json, therefore these vulnerabilities
+    do not affect WildFly installations.
+
+    https://github.com/wildfly-security/wildfly-sca-scanner/issues/59
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j-api@.*$</packageUrl>
+    <cve>CVE-2026-34478</cve>
+    <cve>CVE-2026-34480</cve>
+    <cve>CVE-2026-34481</cve>
+  </suppress>
 </suppressions>
