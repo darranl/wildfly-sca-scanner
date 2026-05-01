@@ -13,6 +13,7 @@ jobs:
   scan-matrix:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
     strategy:
       max-parallel: 1
       matrix:
