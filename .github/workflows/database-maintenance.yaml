@@ -47,13 +47,22 @@ jobs:
       # Populate a properties file with secrets
       - name: Populate Dependency Check Properties
         run: |
-          echo "analyzer.ossindex.password=${{ secrets.OSS_INDEX_PASSWORD }}" > dependency-check.properties
+          if [ "${{ vars.SONATYPE_OSS_INDEX }}" == "OFF" ]; then
+            echo "analyzer.ossindex.enabled=false" > dependency-check.properties
+          else
+            echo "analyzer.ossindex.password=${{ secrets.OSS_INDEX_PASSWORD }}" > dependency-check.properties
+          fi
           ls -l
           cat dependency-check.properties
 
       # Update Database
       - name: Update OWASP Database
-        run: ./dependency-check/bin/dependency-check.sh --updateonly --data=owasp-database --nvdApiKey=${{ secrets.NVD_API_KEY }} --ossIndexUsername=${{ secrets.OSS_INDEX_USERNAME }} --propertyfile=dependency-check.properties --log=dependency-check.log
+        run: |
+          OSS_ARGS=""
+          if [ "${{ vars.SONATYPE_OSS_INDEX }}" != "OFF" ]; then
+            OSS_ARGS="--ossIndexUsername=${{ secrets.OSS_INDEX_USERNAME }}"
+          fi
+          ./dependency-check/bin/dependency-check.sh --updateonly --data=owasp-database --nvdApiKey=${{ secrets.NVD_API_KEY }} $OSS_ARGS --propertyfile=dependency-check.properties --log=dependency-check.log
 
       # Upload the log files
       - name: Upload Log File
