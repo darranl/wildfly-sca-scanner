@@ -61,14 +61,23 @@ jobs:
       - name: Populate Dependency Check Properties
         if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
         run: |
-          echo "analyzer.ossindex.password=${{ secrets.OSS_INDEX_PASSWORD }}" > dependency-check.properties
+          if [ "${{ vars.SONATYPE_OSS_INDEX }}" == "OFF" ]; then
+            echo "analyzer.ossindex.enabled=false" > dependency-check.properties
+          else
+            echo "analyzer.ossindex.password=${{ secrets.OSS_INDEX_PASSWORD }}" > dependency-check.properties
+          fi
           ls -l
           cat dependency-check.properties
 
       # Perform SCA Scan
       - name: Perform SCA Scan
         if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
-        run: ./dependency-check/bin/dependency-check.sh --project="WildFly ${{ matrix.version}}" --scan="wildfly" --noupdate --suppression=owasp-suppressions/owasp-suppressions.xml --data=owasp-database --format=HTML --format=JSON --nvdApiKey=${{ secrets.NVD_API_KEY }} --ossIndexUsername=${{ secrets.OSS_INDEX_USERNAME }} --propertyfile=dependency-check.properties --log=dependency-check.log
+        run: |
+          OSS_ARGS=""
+          if [ "${{ vars.SONATYPE_OSS_INDEX }}" != "OFF" ]; then
+            OSS_ARGS="--ossIndexUsername=${{ secrets.OSS_INDEX_USERNAME }}"
+          fi
+          ./dependency-check/bin/dependency-check.sh --project="WildFly ${{ matrix.version}}" --scan="wildfly" --noupdate --suppression=owasp-suppressions/owasp-suppressions.xml --data=owasp-database --format=HTML --format=JSON --nvdApiKey=${{ secrets.NVD_API_KEY }} $OSS_ARGS --propertyfile=dependency-check.properties --log=dependency-check.log
 
       # Upload the log files
       - name: Upload Scan Results
