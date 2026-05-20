@@ -522,4 +522,23 @@
     <cve>CVE-2026-34479</cve>
     <cve>CVE-2026-34477</cve>
   </suppress>
+  <suppress until="2027-05-20">
+    <notes><![CDATA[
+    file names: relaxng-datatype-4.0.8.jar, rngom-4.0.8.jar
+
+    [Issue #65] These are JAXB XML schema parsing libraries (com.sun.xml.bind.external groupId)
+    being incorrectly matched to the Eclipse GlassFish application server CPE due to two coinciding
+    factors: (a) shared GlassFish/JAXB-RI project heritage, and (b) version number coincidence
+    (library v4.0.8 vs. GlassFish application server 4.0.8).
+
+    CVE-2024-9329 is an open redirect vulnerability in the GlassFish /management/domain HTTP
+    management endpoint. These libraries are pure XML parsing components with no HTTP server,
+    management API, or redirect functionality. The actually vulnerable component is
+    org.glassfish.main.admin:rest-service, which is not present in WildFly.
+
+    https://github.com/wildfly-security/wildfly-sca-scanner/issues/65
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.sun\.xml\.bind\.external/(relaxng-datatype|rngom)@.*$</packageUrl>
+    <cve>CVE-2024-9329</cve>
+  </suppress>
 </suppressions>
