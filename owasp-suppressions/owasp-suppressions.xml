@@ -488,4 +488,21 @@
     <cve>CVE-2026-34480</cve>
     <cve>CVE-2026-34481</cve>
   </suppress>
+  <suppress until="2027-05-20">
+    <notes><![CDATA[
+    file name: log4j-api-2.23.1.jar
+
+    [Issue #63] WildFly only includes log4j-api (the API layer), not the affected implementation components.
+    - CVE-2026-34479: Silent log event loss in Log4j1XmlLayout (affects log4j-1.2-api only)
+    - CVE-2026-34477: verifyHostName attribute silently ignored in TLS config (affects log4j-core only)
+
+    WildFly does not use log4j-1.2-api or log4j-core, therefore these vulnerabilities
+    do not affect WildFly installations.
+
+    https://github.com/wildfly-security/wildfly-sca-scanner/issues/63
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j-api@.*$</packageUrl>
+    <cve>CVE-2026-34479</cve>
+    <cve>CVE-2026-34477</cve>
+  </suppress>
 </suppressions>
