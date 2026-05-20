@@ -46,6 +46,23 @@
    </suppress>
    <suppress>
       <notes><![CDATA[
+      file name: micrometer-registry-prometheus-*.jar
+
+      [Issue #64] WildFly uses io.micrometer:micrometer-registry-prometheus, a Java metrics client
+      library, which is being incorrectly mapped to the Prometheus server CPE
+      (cpe:2.3:a:prometheus:prometheus). These are entirely separate projects: Micrometer is a Java
+      metrics facade (io.micrometer groupId), while the Prometheus server is a Go binary
+      (github.com/prometheus/prometheus). The scanner falls back to CPE-based version matching for
+      this jar because it has no resolved purl, causing accidental version number matches against
+      the Prometheus server CPE.
+
+      https://github.com/wildfly-security/wildfly-sca-scanner/issues/64
+      ]]></notes>
+      <filePath regex="true">.*micrometer-registry-prometheus-.*\.jar</filePath>
+      <cpe>cpe:/a:prometheus:prometheus</cpe>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
       file name: jakarta-client-resteasy-3.0.3.Final.jar
       ]]></notes>
       <packageUrl regex="true">^pkg:maven/org\.wildfly\.security\.jakarta/jakarta\-client\-resteasy@.*$</packageUrl>
