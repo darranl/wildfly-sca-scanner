@@ -541,4 +541,34 @@
     <packageUrl regex="true">^pkg:maven/com\.sun\.xml\.bind\.external/(relaxng-datatype|rngom)@.*$</packageUrl>
     <cve>CVE-2024-9329</cve>
   </suppress>
+  <suppress until="2027-05-20">
+    <notes><![CDATA[
+    file name: netty-*.jar
+
+    [Issue #66] CVE-2026-42582 affects only io.netty:netty-codec-http3 (the HTTP/3 QPACK decoder),
+    which exists only in the Netty 4.2.x branch. WildFly ships Netty 4.1.x and netty-codec-http3
+    is entirely absent from the distribution. The scanner attributes the CVE to all Netty jars at
+    version 4.1.133.Final because NVD CPEs are product-level, not module-level.
+
+    The packageUrl regex explicitly excludes netty-codec-http3 so that if WildFly ever adds HTTP/3
+    support this suppression will not hide a real finding.
+
+    https://github.com/wildfly-security/wildfly-sca-scanner/issues/66
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.netty/(?!netty-codec-http3).*@.*$</packageUrl>
+    <cve>CVE-2026-42582</cve>
+  </suppress>
+  <suppress until="2027-05-20">
+    <notes><![CDATA[
+    file name: jboss-client.jar
+
+    [Issue #66] jboss-client.jar shades netty-transport-native-epoll:4.1.133.Final. CVE-2026-42582
+    affects only netty-codec-http3 (4.2.x only), which is not present in WildFly. Suppressed via
+    filePath as the shaded jar has no resolvable purl for the embedded Netty dependency.
+
+    https://github.com/wildfly-security/wildfly-sca-scanner/issues/66
+    ]]></notes>
+    <filePath regex="true">^.*/wildfly/bin/client/jboss-client\.jar$</filePath>
+    <cve>CVE-2026-42582</cve>
+  </suppress>
 </suppressions>
