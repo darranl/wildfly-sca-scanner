@@ -571,4 +571,25 @@
     <filePath regex="true">^.*/wildfly/bin/client/jboss-client\.jar$</filePath>
     <cve>CVE-2026-42582</cve>
   </suppress>
+  <suppress until="2027-06-08">
+    <notes><![CDATA[
+    file names: cxf-core-4.0.11.jar, cxf-rt-databinding-aegis-4.0.11.jar,
+    cxf-rt-features-clustering-4.0.11.jar, cxf-rt-ws-security-4.0.11.jar,
+    cxf-services-sts-core-4.0.11.jar, cxf-tools-wsdlto-core-4.0.11.jar
+
+    [Issue #68] These CVEs affect CXF sub-modules that are not present in WildFly:
+    - CVE-2026-44930: LDAP injection in the LDAP Certificate repository of the CXF XKMS server
+      (cxf-services-xkms-* modules). WildFly does not ship the CXF XKMS server.
+    - CVE-2026-44618: Insecure XML parser configuration in CXF's WS-Transfer module
+      (cxf-rt-ws-transfer). WildFly does not ship the CXF WS-Transfer module.
+
+    The scanner attributes these CVEs to all CXF jars at version 4.0.11 via a product-level
+    match, but the actually vulnerable components are absent from the WildFly distribution.
+
+    https://github.com/wildfly-security/wildfly-sca-scanner/issues/68
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.cxf[^/]*/.*@.*$</packageUrl>
+    <cve>CVE-2026-44930</cve>
+    <cve>CVE-2026-44618</cve>
+  </suppress>
 </suppressions>
