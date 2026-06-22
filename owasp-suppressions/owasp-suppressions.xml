@@ -599,4 +599,35 @@
     <cve>CVE-2026-44930</cve>
     <cve>CVE-2026-44618</cve>
   </suppress>
+  <suppress until="2027-06-22">
+    <notes><![CDATA[
+    file name: activemq-artemis-native-2.0.0.jar
+
+    [Issue #72] This jar is a JNI wrapper for Linux libaio, maintained in a separate repository
+    with independent versioning (currently 2.0.0). The OWASP scanner incorrectly matches Artemis
+    broker CVEs to this jar because they share the org.apache.activemq groupId. None of these CVEs
+    affect the native libaio wrapper:
+    - CVE-2017-12174: Artemis broker DoS via large message
+    - CVE-2021-26117: LDAP login module authentication bypass in ActiveMQ (classic 5.x)
+    - CVE-2021-4040: AMQP message parsing flaw in Artemis broker
+    - CVE-2022-23913: Artemis broker DoS via unvalidated user frames
+    - CVE-2022-35278: Artemis web console HTML injection
+    - CVE-2023-50780: Artemis broker user enumeration
+    - CVE-2025-27391: Artemis broker deserialization gadget chain
+    - CVE-2025-27427: Artemis broker OpenWire resource exhaustion
+    - CVE-2026-32642: Artemis broker incorrect exception handling in AMQP protocol manager
+
+    https://github.com/wildfly-security/wildfly-sca-scanner/issues/72
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.activemq/activemq\-artemis\-native@.*$</packageUrl>
+    <cve>CVE-2017-12174</cve>
+    <cve>CVE-2021-26117</cve>
+    <cve>CVE-2021-4040</cve>
+    <cve>CVE-2022-23913</cve>
+    <cve>CVE-2022-35278</cve>
+    <cve>CVE-2023-50780</cve>
+    <cve>CVE-2025-27391</cve>
+    <cve>CVE-2025-27427</cve>
+    <cve>CVE-2026-32642</cve>
+  </suppress>
 </suppressions>
