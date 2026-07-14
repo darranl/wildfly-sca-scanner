@@ -81,7 +81,7 @@ Three workflows provision different WildFly distributions and cache them for sca
 #### WildFly Preview Maintenance (`wildfly-preview-instances.yaml`)
 - **Schedule**: Daily at 05:27 UTC
 - **Purpose**: Provisions WildFly Preview distributions (experimental features)
-- **Versions**: Preview variants for versions 38+  (currently: 38.0.1.Final, 39.0.1.Final, 40.0.1.Final)
+- **Versions**: Preview variants for latest version only (currently: 40.0.1.Final)
 - **Caching**: Uses key `wildfly-{VERSION}-Preview`
 - **Provisioning**: Uses Galleon to install `wildfly-preview` feature pack
 
@@ -205,7 +205,7 @@ The scanning infrastructure provisions and scans different combinations of WildF
 #### Scan Matrix (scan-wildfly.yaml)
 The scan workflow must include all provisioned versions and variants:
 - Released standard versions: `37.0.1.Final`, `38.0.1.Final`, `39.0.1.Final`, `40.0.1.Final`
-- Released preview versions: `38.0.1.Final-Preview`, `39.0.1.Final-Preview`, `40.0.1.Final-Preview`
+- Released preview versions: `40.0.1.Final-Preview` (latest version only)
 - Released EE10 versions: `40.0.1.Final-EE10`
 - Nightly standard builds: `standard-upstream`, `standard-maintenance`
 - Nightly EE10 builds: `ee10-upstream` (upstream only)
