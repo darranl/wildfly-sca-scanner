@@ -240,8 +240,8 @@ Starting with WildFly 40, multiple Jakarta EE variants are available. To add the
 1. **Understand Galleon Feature Packs**:
    - Standard: `wildfly#VERSION`
    - Preview: `wildfly-preview#VERSION`
-   - EE10: `wildfly-ee10#VERSION` (if available)
-   - EE11: `wildfly-ee11#VERSION` (if available)
+   - EE10: `org.wildfly:wildfly-ee-10-feature-pack:VERSION org.wildfly:wildfly-galleon-pack:VERSION` (order matters!)
+   - Note: EE10 requires both feature packs, with wildfly-ee-10-feature-pack listed first
 
 2. **Update Provisioning Workflows**:
    - Create new jobs or matrix dimensions for each variant
@@ -253,19 +253,20 @@ Starting with WildFly 40, multiple Jakarta EE variants are available. To add the
    - Use descriptive names (e.g., `41.0.0.Final-EE10`, `41.0.0.Final-EE11`)
    - Ensure cache key patterns match provisioning workflows
 
-4. **Example for WildFly 41 with EE10/EE11**:
+4. **Example for WildFly 41 with EE10**:
    ```yaml
    # In wildfly-instances.yaml or a new workflow
    matrix:
      version: [41.0.0.Final]
-     variant: [standard, ee10, ee11, preview]
+     variant: [standard, ee10, preview]
    
    # Provision step would use:
    # wildfly#41.0.0.Final (standard)
-   # wildfly-ee10#41.0.0.Final (ee10)
-   # wildfly-ee11#41.0.0.Final (ee11)
+   # org.wildfly:wildfly-ee-10-feature-pack:41.0.0.Final org.wildfly:wildfly-galleon-pack:41.0.0.Final (ee10)
    # wildfly-preview#41.0.0.Final (preview)
    ```
+   
+   **Note**: EE10 provisioning requires both feature packs in the correct order (wildfly-ee-10-feature-pack first, then wildfly-galleon-pack).
 
 ### Version-Specific Variant Support
 

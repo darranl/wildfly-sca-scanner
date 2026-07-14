@@ -41,7 +41,7 @@ jobs:
       # If the WildFly Cache was a miss - provision the server.
       - name: Provision WildFly
         if: steps.wildfly-cache.outputs.cache-hit != 'true'
-        run: " ./galleon/bin/galleon.sh install wildfly-ee10#${{ matrix.version }} --dir=wildfly"
+        run: " ./galleon/bin/galleon.sh install org.wildfly:wildfly-ee-10-feature-pack:${{ matrix.version }} org.wildfly:wildfly-galleon-pack:${{ matrix.version }} --dir=wildfly"
 
       # Upload the log files
       - name: Upload Log File

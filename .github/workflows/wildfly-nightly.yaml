@@ -72,7 +72,7 @@ jobs:
         if: ${{ matrix.version == 'upstream' }}
         run: |
           rm -rf -- "${{ github.workspace }}/wildfly"
-          ./galleon/bin/galleon.sh install wildfly-ee10#${{ steps.wildfly-nightly.outputs.wildfly-version }} --dir=wildfly
+          ./galleon/bin/galleon.sh install org.wildfly:wildfly-ee-10-feature-pack:${{ steps.wildfly-nightly.outputs.wildfly-version }} org.wildfly:wildfly-galleon-pack:${{ steps.wildfly-nightly.outputs.wildfly-version }} --dir=wildfly
 
       # Cache the installation
       - name: Cache WildFly EE10 Installation
