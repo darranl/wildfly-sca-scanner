@@ -432,7 +432,15 @@
      <notes><![CDATA[
      file name: elasticsearch-rest-client-8.15.4.jar
 
-     [WFLY-21079] This CVE is about the server side of the connection, not the client library we depend on.
+     [WFLY-21079] These CVEs are about the Elasticsearch server, not the client library we depend on.
+     
+     - CVE-2024-52979, CVE-2025-37731, CVE-2025-68384, CVE-2025-37727, CVE-2025-68390: Server-side issues
+     - CVE-2026-56148: Uncontrolled recursion in query processing (server-side)
+     - CVE-2026-56149: ML request resource exhaustion (server-side, requires ML features)
+     
+     The elasticsearch-rest-client is an HTTP client library for communicating with Elasticsearch servers.
+     It does not process queries, handle ML requests, or implement server-side logic.
+     
      https://github.com/darranl/aphrodite/issues/26
      ]]></notes>
      <packageUrl regex="true">^pkg:maven/org\.elasticsearch\.client/elasticsearch-rest-client.*@.*$</packageUrl>
@@ -441,6 +449,8 @@
      <cve>CVE-2025-68384</cve>
      <cve>CVE-2025-37727</cve>
      <cve>CVE-2025-68390</cve>
+     <cve>CVE-2026-56148</cve>
+     <cve>CVE-2026-56149</cve>
   </suppress>
   <suppress until="2026-11-28">
      <notes><![CDATA[
