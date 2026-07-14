@@ -71,7 +71,7 @@ jobs:
       - name: Provision WildFly EE10
         if: ${{ matrix.version == 'upstream' }}
         run: |
-          rm -fR ${{ github.workspace }}/wildfly
+          rm -rf -- "${{ github.workspace }}/wildfly"
           ./galleon/bin/galleon.sh install wildfly-ee10#${{ steps.wildfly-nightly.outputs.wildfly-version }} --dir=wildfly
 
       # Cache the installation

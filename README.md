@@ -74,16 +74,23 @@ Three workflows provision different WildFly distributions and cache them for sca
 #### WildFly Maintenance (`wildfly-instances.yaml`)
 - **Schedule**: Daily at 05:22 UTC
 - **Purpose**: Provisions released WildFly versions using Galleon
-- **Versions**: Matrix includes specific released versions (e.g., 36.0.1.Final, 37.0.1.Final, 38.0.1.Final, 39.0.1.Final)
+- **Versions**: Last 4 final releases (currently: 37.0.1.Final, 38.0.1.Final, 39.0.1.Final, 40.0.1.Final)
 - **Caching**: Each version is cached with key `wildfly-{VERSION}` and only provisioned if cache miss occurs
 - **Provisioning**: Uses Galleon to install standard WildFly feature pack
 
 #### WildFly Preview Maintenance (`wildfly-preview-instances.yaml`)
 - **Schedule**: Daily at 05:27 UTC
 - **Purpose**: Provisions WildFly Preview distributions (experimental features)
-- **Versions**: Currently provisions 39.0.1.Final Preview
+- **Versions**: Preview variants for versions 38+  (currently: 38.0.1.Final, 39.0.1.Final, 40.0.1.Final)
 - **Caching**: Uses key `wildfly-{VERSION}-Preview`
 - **Provisioning**: Uses Galleon to install `wildfly-preview` feature pack
+
+#### WildFly EE10 Maintenance (`wildfly-ee10-instances.yaml`)
+- **Schedule**: Daily at 05:32 UTC
+- **Purpose**: Provisions WildFly EE10 distributions (Jakarta EE 10 compatibility)
+- **Versions**: EE10 variants for versions 40+ (currently: 40.0.1.Final)
+- **Caching**: Uses key `wildfly-{VERSION}-EE10`
+- **Provisioning**: Uses Galleon to install `wildfly-ee10` feature pack
 
 #### WildFly Nightly Maintenance (`wildfly-nightly.yaml`)
 - **Schedule**: Daily at 05:47 UTC
@@ -103,10 +110,13 @@ Three workflows provision different WildFly distributions and cache them for sca
 #### WildFly Scan (`scan-wildfly.yaml`)
 - **Schedule**: Daily at 06:13 UTC
 - **Purpose**: Performs SCA scans on all provisioned WildFly distributions
-- **Scan Matrix**: Covers released versions, preview versions, and nightly builds
-  - Released: `36.0.1.Final`, `37.0.1.Final`, `38.0.1.Final`, `39.0.1.Final`
-  - Preview: `39.0.1.Final-Preview`
-  - Nightly: `standard-upstream`, `preview-upstream`, `standard-maintenance`, `preview-maintenance`
+- **Scan Matrix**: Covers released versions, preview versions, EE10 variants, and nightly builds
+  - Released standard: `37.0.1.Final`, `38.0.1.Final`, `39.0.1.Final`, `40.0.1.Final`
+  - Released preview: `38.0.1.Final-Preview`, `39.0.1.Final-Preview`, `40.0.1.Final-Preview`
+  - Released EE10: `40.0.1.Final-EE10`
+  - Nightly standard: `standard-upstream`, `standard-maintenance`
+  - Nightly EE10: `ee10-upstream`
+  - Nightly preview: `preview-upstream`, `preview-maintenance`
 - **Execution Control**: `max-parallel: 1` ensures scans run sequentially to manage resource usage and database contention
 - **Cache Dependencies**:
   - Restores WildFly installation (fail on cache miss)
