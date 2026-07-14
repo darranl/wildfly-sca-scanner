@@ -631,3 +631,40 @@
     <cve>CVE-2026-32642</cve>
   </suppress>
 </suppressions>
+  <suppress until="2027-07-14">
+    <notes><![CDATA[
+    file name: httpcore-4.4.16.jar, httpcore-nio-4.4.16.jar
+
+    [WFLY-22073] CVE-2026-54399 and CVE-2026-54428 affect Apache HttpComponents Core 5.x only
+    (specifically 5.0-alpha through 5.4.2 and 5.5-alpha through 5.5-beta1). WildFly ships
+    httpcore 4.4.16 from the 4.x branch, which is not affected by these vulnerabilities.
+    
+    - CVE-2026-54399: HTTP/1.1 message parser DoS via excessive headers/header length
+    - CVE-2026-54428: HTTP/2 HPACK decoder DoS via oversized compressed header blocks
+    
+    The 4.x and 5.x branches are separate codebases with different vulnerabilities.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.httpcomponents/httpcore(-nio)?@4\..*$</packageUrl>
+    <cve>CVE-2026-54399</cve>
+    <cve>CVE-2026-54428</cve>
+  </suppress>
+  <suppress until="2027-07-14">
+    <notes><![CDATA[
+    file name: kafka-clients-4.2.1.jar
+
+    [WFLY-22072] CVE-2026-41115 is an improper authorization issue in Apache Kafka's
+    CONSUMER_GROUP_DESCRIBE API. This is primarily a documentation/configuration issue
+    rather than a code vulnerability. The implementation validates DESCRIBE permission
+    (which is correct), but documentation originally stated it should validate READ
+    permission. Apache's resolution is to update documentation to match implementation.
+    
+    CVSS: 4.3 MEDIUM (low severity, information disclosure only)
+    Impact: Users with DESCRIBE permission can access consumer group metadata
+    
+    This affects Kafka server operations and ACL configuration, not the kafka-clients
+    library functionality that WildFly depends on. The fix will be in Kafka 4.3.1+.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.kafka/kafka-clients@.*$</packageUrl>
+    <cve>CVE-2026-41115</cve>
+  </suppress>
+
