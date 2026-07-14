@@ -1,12 +1,12 @@
-name: WildFly Maintenance
+name: WildFly EE10 Maintenance
 
 # Controls when the workflow will run
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  # Run at 5:22 every day
+  # Run at 5:32 every day
   schedule:
-     - cron: "22 5 * * *"
+     - cron: "32 5 * * *"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [37.0.1.Final, 38.0.1.Final, 39.0.1.Final, 40.0.1.Final]
+        version: [40.0.1.Final]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/wildfly
-          key: wildfly-${{ matrix.version}}
+          key: wildfly-${{ matrix.version}}-EE10
 
       # Cache the instllation
       - name: Cache Galleon Installation
@@ -41,7 +41,7 @@ jobs:
       # If the WildFly Cache was a miss - provision the server.
       - name: Provision WildFly
         if: steps.wildfly-cache.outputs.cache-hit != 'true'
-        run: " ./galleon/bin/galleon.sh install wildfly#${{ matrix.version }} --dir=wildfly"
+        run: " ./galleon/bin/galleon.sh install wildfly-ee10#${{ matrix.version }} --dir=wildfly"
 
       # Upload the log files
       - name: Upload Log File
