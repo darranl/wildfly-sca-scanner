@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [38.0.1.Final, 39.0.1.Final, 40.0.0.Final]
+        version: [38.0.1.Final, 39.0.1.Final, 40.0.1.Final]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Cache the instllation
+      # Cache the installation
       - name: Cache WildFly Installation
         id: wildfly-cache
         uses: actions/cache@v4
@@ -29,7 +29,7 @@ jobs:
           path: ${{ github.workspace }}/wildfly
           key: wildfly-${{ matrix.version}}-Preview
 
-      # Cache the instllation
+      # Cache the installation
       - name: Cache Galleon Installation
         id: galleon-installation
         uses: actions/cache/restore@v4

@@ -207,7 +207,7 @@ When a new WildFly version is released, follow these steps:
 
 1. **Update wildfly-instances.yaml**:
    - Add the new version to the `matrix.version` array
-   - Example: `40.0.0.Final`
+   - Example: `41.0.0.Final`
    - The workflow will automatically provision and cache it
 
 2. **Update wildfly-preview-instances.yaml** (if preview is available):
@@ -217,7 +217,7 @@ When a new WildFly version is released, follow these steps:
 3. **Update scan-wildfly.yaml**:
    - Add the standard version to the `matrix.version` array
    - Add the preview version with `-Preview` suffix if applicable
-   - Example: `40.0.0.Final` and `40.0.0.Final-Preview`
+   - Example: `41.0.0.Final` and `41.0.0.Final-Preview`
 
 4. **Consider Removing Old Versions**:
    - Evaluate if older versions should be removed to reduce scan time
@@ -240,21 +240,21 @@ Starting with WildFly 40, multiple Jakarta EE variants are available. To add the
 
 3. **Update Scan Matrix**:
    - Add entries for each new variant
-   - Use descriptive names (e.g., `40.0.0.Final-EE10`, `40.0.0.Final-EE11`)
+   - Use descriptive names (e.g., `41.0.0.Final-EE10`, `41.0.0.Final-EE11`)
    - Ensure cache key patterns match provisioning workflows
 
-4. **Example for WildFly 40 with EE10/EE11**:
+4. **Example for WildFly 41 with EE10/EE11**:
    ```yaml
    # In wildfly-instances.yaml or a new workflow
    matrix:
-     version: [40.0.0.Final]
+     version: [41.0.0.Final]
      variant: [standard, ee10, ee11, preview]
    
    # Provision step would use:
-   # wildfly#40.0.0.Final (standard)
-   # wildfly-ee10#40.0.0.Final (ee10)
-   # wildfly-ee11#40.0.0.Final (ee11)
-   # wildfly-preview#40.0.0.Final (preview)
+   # wildfly#41.0.0.Final (standard)
+   # wildfly-ee10#41.0.0.Final (ee10)
+   # wildfly-ee11#41.0.0.Final (ee11)
+   # wildfly-preview#41.0.0.Final (preview)
    ```
 
 ### Version-Specific Variant Support

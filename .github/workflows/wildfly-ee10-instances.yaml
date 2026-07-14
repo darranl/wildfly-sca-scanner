@@ -21,7 +21,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Cache the instllation
+      # Cache the installation
       - name: Cache WildFly Installation
         id: wildfly-cache
         uses: actions/cache@v4
@@ -29,7 +29,7 @@ jobs:
           path: ${{ github.workspace }}/wildfly
           key: wildfly-${{ matrix.version}}-EE10
 
-      # Cache the instllation
+      # Cache the installation
       - name: Cache Galleon Installation
         id: galleon-installation
         uses: actions/cache/restore@v4
