@@ -68,6 +68,21 @@ jobs:
           path: ${{ github.workspace }}/wildfly
           key: wildfly-standard-${{ matrix.version}}-${{ github.run_id }}-${{ github.run_attempt }}
 
+      - name: Provision WildFly EE10
+        if: ${{ matrix.version == 'upstream' }}
+        run: |
+          rm -rf -- "${{ github.workspace }}/wildfly"
+          ./galleon/bin/galleon.sh install wildfly-ee10#${{ steps.wildfly-nightly.outputs.wildfly-version }} --dir=wildfly
+
+      # Cache the installation
+      - name: Cache WildFly EE10 Installation
+        if: ${{ matrix.version == 'upstream' }}
+        id: wildfly-ee10-cache
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ github.workspace }}/wildfly
+          key: wildfly-ee10-${{ matrix.version}}-${{ github.run_id }}-${{ github.run_attempt }}
+
       - name: Provision WildFly Preview
         if: ${{ matrix.version != 'maintenance' || vars.MAINTENANCE_CI != 'OFF' }}
         run: |

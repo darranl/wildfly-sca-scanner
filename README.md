@@ -16,12 +16,22 @@ The scanning infrastructure is implemented as a series of coordinated GitHub Act
 
 ### Workflow Execution Schedule
 
-The workflows execute in the following sequence:
+The workflows execute in the following sequence with deliberate time offsets to avoid GitHub's on-the-hour congestion:
 
-1. **Tool Downloads** (04:26 & 04:41 UTC)
-2. **Database Maintenance** (05:12 UTC)
-3. **WildFly Provisioning** (05:22, 05:27, 05:47 UTC)
-4. **Security Scanning** (06:13 UTC)
+1. **Tool Downloads**
+   - 04:26 UTC - OWASP Dependency Check Download
+   - 04:41 UTC - Galleon Download
+2. **Database Maintenance**
+   - 05:12 UTC - OWASP Database Maintenance
+3. **WildFly Provisioning**
+   - 05:22 UTC - WildFly Maintenance (standard versions)
+   - 05:27 UTC - WildFly Preview Maintenance
+   - 05:32 UTC - WildFly EE10 Maintenance
+   - 05:47 UTC - WildFly Nightly Maintenance
+4. **Security Scanning**
+   - 06:13 UTC - WildFly Scan (all variants)
+
+**Note on Timing**: All workflows use minute offsets (e.g., :26, :41, :12) rather than running on the hour (:00) to mitigate GitHub Actions' congestion issues when many workflows across all repositories start simultaneously at the top of each hour.
 
 ### 1. Tool Downloads
 
@@ -64,16 +74,23 @@ Three workflows provision different WildFly distributions and cache them for sca
 #### WildFly Maintenance (`wildfly-instances.yaml`)
 - **Schedule**: Daily at 05:22 UTC
 - **Purpose**: Provisions released WildFly versions using Galleon
-- **Versions**: Matrix includes specific released versions (e.g., 36.0.1.Final, 37.0.1.Final, 38.0.1.Final, 39.0.1.Final)
+- **Versions**: Last 4 final releases (currently: 37.0.1.Final, 38.0.1.Final, 39.0.1.Final, 40.0.1.Final)
 - **Caching**: Each version is cached with key `wildfly-{VERSION}` and only provisioned if cache miss occurs
 - **Provisioning**: Uses Galleon to install standard WildFly feature pack
 
 #### WildFly Preview Maintenance (`wildfly-preview-instances.yaml`)
 - **Schedule**: Daily at 05:27 UTC
 - **Purpose**: Provisions WildFly Preview distributions (experimental features)
-- **Versions**: Currently provisions 39.0.1.Final Preview
+- **Versions**: Preview variants for versions 38+  (currently: 38.0.1.Final, 39.0.1.Final, 40.0.1.Final)
 - **Caching**: Uses key `wildfly-{VERSION}-Preview`
 - **Provisioning**: Uses Galleon to install `wildfly-preview` feature pack
+
+#### WildFly EE10 Maintenance (`wildfly-ee10-instances.yaml`)
+- **Schedule**: Daily at 05:32 UTC
+- **Purpose**: Provisions WildFly EE10 distributions (Jakarta EE 10 compatibility)
+- **Versions**: EE10 variants for versions 40+ (currently: 40.0.1.Final)
+- **Caching**: Uses key `wildfly-{VERSION}-EE10`
+- **Provisioning**: Uses Galleon to install `wildfly-ee10` feature pack
 
 #### WildFly Nightly Maintenance (`wildfly-nightly.yaml`)
 - **Schedule**: Daily at 05:47 UTC
@@ -93,10 +110,13 @@ Three workflows provision different WildFly distributions and cache them for sca
 #### WildFly Scan (`scan-wildfly.yaml`)
 - **Schedule**: Daily at 06:13 UTC
 - **Purpose**: Performs SCA scans on all provisioned WildFly distributions
-- **Scan Matrix**: Covers released versions, preview versions, and nightly builds
-  - Released: `36.0.1.Final`, `37.0.1.Final`, `38.0.1.Final`, `39.0.1.Final`
-  - Preview: `39.0.1.Final-Preview`
-  - Nightly: `standard-upstream`, `preview-upstream`, `standard-maintenance`, `preview-maintenance`
+- **Scan Matrix**: Covers released versions, preview versions, EE10 variants, and nightly builds
+  - Released standard: `37.0.1.Final`, `38.0.1.Final`, `39.0.1.Final`, `40.0.1.Final`
+  - Released preview: `38.0.1.Final-Preview`, `39.0.1.Final-Preview`, `40.0.1.Final-Preview`
+  - Released EE10: `40.0.1.Final-EE10`
+  - Nightly standard: `standard-upstream`, `standard-maintenance`
+  - Nightly EE10: `ee10-upstream`
+  - Nightly preview: `preview-upstream`, `preview-maintenance`
 - **Execution Control**: `max-parallel: 1` ensures scans run sequentially to manage resource usage and database contention
 - **Cache Dependencies**:
   - Restores WildFly installation (fail on cache miss)
@@ -146,6 +166,147 @@ The workflows are configured via GitHub repository settings:
 - `NVD_API_KEY`: API key for National Vulnerability Database access
 - `OSS_INDEX_USERNAME`: Username for Sonatype OSS Index
 - `OSS_INDEX_PASSWORD`: Password for Sonatype OSS Index
+
+## Managing Provisioned Versions and Scan Targets
+
+The scanner maintains a matrix of WildFly versions and distribution variants that are provisioned and scanned daily. This section explains how to manage this matrix as new WildFly versions are released or distribution variants are added.
+
+### Version and Variant Matrix
+
+The scanning infrastructure provisions and scans different combinations of WildFly versions and distribution variants:
+
+#### Released Versions (wildfly-instances.yaml)
+- **Purpose**: Provisions stable, released WildFly versions
+- **Version Policy**: Scan the last 4 final releases (currently: 37.0.1.Final, 38.0.1.Final, 39.0.1.Final, 40.0.1.Final)
+- **Distribution**: Standard WildFly feature pack (`wildfly#VERSION`)
+- **Cache Key Pattern**: `wildfly-{VERSION}`
+
+#### Preview Distributions (wildfly-preview-instances.yaml)
+- **Purpose**: Provisions WildFly Preview distributions with experimental features
+- **Current Versions**: 38.0.1.Final, 39.0.1.Final, 40.0.1.Final
+- **Distribution**: Preview feature pack (`wildfly-preview#VERSION`)
+- **Cache Key Pattern**: `wildfly-{VERSION}-Preview`
+
+#### EE10 Distributions (wildfly-ee10-instances.yaml)
+- **Purpose**: Provisions WildFly EE10 distributions (Jakarta EE 10 compatibility)
+- **Current Versions**: 40.0.1.Final
+- **Distribution**: EE10 feature pack (`wildfly-ee10#VERSION`)
+- **Cache Key Pattern**: `wildfly-{VERSION}-EE10`
+- **Note**: Only available for WildFly 40+; earlier versions use EE10 as the default
+
+#### Nightly Builds (wildfly-nightly.yaml)
+- **Purpose**: Provisions latest development builds from CI
+- **Branches**: `upstream` (main development), `maintenance` (maintenance branch)
+- **Distributions**: 
+  - Upstream: standard, EE10, and preview
+  - Maintenance: standard and preview only
+- **Cache Key Pattern**: `wildfly-{standard|ee10|preview}-{upstream|maintenance}-{RUN_ID}-{ATTEMPT}`
+
+#### Scan Matrix (scan-wildfly.yaml)
+The scan workflow must include all provisioned versions and variants:
+- Released standard versions: `37.0.1.Final`, `38.0.1.Final`, `39.0.1.Final`, `40.0.1.Final`
+- Released preview versions: `38.0.1.Final-Preview`, `39.0.1.Final-Preview`, `40.0.1.Final-Preview`
+- Released EE10 versions: `40.0.1.Final-EE10`
+- Nightly standard builds: `standard-upstream`, `standard-maintenance`
+- Nightly EE10 builds: `ee10-upstream` (upstream only)
+- Nightly preview builds: `preview-upstream`, `preview-maintenance`
+
+### Adding a New WildFly Version
+
+When a new WildFly version is released, follow these steps:
+
+1. **Update wildfly-instances.yaml**:
+   - Add the new version to the `matrix.version` array
+   - Example: `41.0.0.Final`
+   - The workflow will automatically provision and cache it
+
+2. **Update wildfly-preview-instances.yaml** (if preview is available):
+   - Add the new version to the `matrix.version` array
+   - The workflow will provision the preview variant
+
+3. **Update scan-wildfly.yaml**:
+   - Add the standard version to the `matrix.version` array
+   - Add the preview version with `-Preview` suffix if applicable
+   - Example: `41.0.0.Final` and `41.0.0.Final-Preview`
+
+4. **Consider Removing Old Versions**:
+   - Evaluate if older versions should be removed to reduce scan time
+   - Remove from all three workflow files consistently
+
+### Adding Distribution Variants (EE10, EE11)
+
+Starting with WildFly 40, multiple Jakarta EE variants are available. To add these:
+
+1. **Understand Galleon Feature Packs**:
+   - Standard: `wildfly#VERSION`
+   - Preview: `wildfly-preview#VERSION`
+   - EE10: `wildfly-ee10#VERSION` (if available)
+   - EE11: `wildfly-ee11#VERSION` (if available)
+
+2. **Update Provisioning Workflows**:
+   - Create new jobs or matrix dimensions for each variant
+   - Use appropriate Galleon feature pack names
+   - Assign unique cache keys (e.g., `wildfly-{VERSION}-EE10`)
+
+3. **Update Scan Matrix**:
+   - Add entries for each new variant
+   - Use descriptive names (e.g., `41.0.0.Final-EE10`, `41.0.0.Final-EE11`)
+   - Ensure cache key patterns match provisioning workflows
+
+4. **Example for WildFly 41 with EE10/EE11**:
+   ```yaml
+   # In wildfly-instances.yaml or a new workflow
+   matrix:
+     version: [41.0.0.Final]
+     variant: [standard, ee10, ee11, preview]
+   
+   # Provision step would use:
+   # wildfly#41.0.0.Final (standard)
+   # wildfly-ee10#41.0.0.Final (ee10)
+   # wildfly-ee11#41.0.0.Final (ee11)
+   # wildfly-preview#41.0.0.Final (preview)
+   ```
+
+### Version-Specific Variant Support
+
+Not all WildFly versions support all distribution variants:
+
+- **WildFly 36-37**: Standard only (no preview, no EE variants)
+- **WildFly 38-39**: Standard and Preview (no EE variants)
+- **WildFly 40+**: Standard, Preview, EE10, EE11 (expected)
+- **Nightly Builds**: Follow the same pattern as the target release version
+
+When updating workflows, ensure you only provision variants that exist for each version.
+
+### Workflow Synchronization
+
+**Critical**: The scan matrix in `scan-wildfly.yaml` must exactly match what is provisioned:
+- Every entry in the scan matrix must have a corresponding cache entry
+- Cache keys must match between provisioning and scanning workflows
+- Missing cache entries will cause scan failures (`fail-on-cache-miss: true`)
+
+### Testing Changes
+
+After modifying the version matrix:
+
+1. **Manual Workflow Dispatch**:
+   - Trigger provisioning workflows manually via GitHub Actions UI
+   - Verify successful provisioning and cache creation
+   - Check artifact uploads for any errors
+
+2. **Verify Cache Keys**:
+   - Ensure cache keys are unique and consistent
+   - Check GitHub Actions cache storage for expected entries
+
+3. **Test Scanning**:
+   - Manually trigger scan workflow
+   - Verify all matrix entries complete successfully
+   - Review scan results artifacts
+
+4. **Monitor Scheduled Runs**:
+   - Watch the first scheduled run after changes
+   - Verify timing and cache hit rates
+   - Check for any failures or warnings
 
 ### Suppressions
 
