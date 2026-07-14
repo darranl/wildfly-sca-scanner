@@ -240,8 +240,8 @@ Starting with WildFly 40, multiple Jakarta EE variants are available. To add the
 1. **Understand Galleon Feature Packs**:
    - Standard: `wildfly#VERSION`
    - Preview: `wildfly-preview#VERSION`
-   - EE10: `org.wildfly:wildfly-ee-10-feature-pack:VERSION org.wildfly:wildfly-galleon-pack:VERSION` (order matters!)
-   - Note: EE10 requires both feature packs, with wildfly-ee-10-feature-pack listed first
+   - EE10: Requires provisioning.xml with both `org.wildfly:wildfly-ee-10-feature-pack:VERSION` and `org.wildfly:wildfly-galleon-pack:VERSION` (order matters!)
+   - Note: EE10 requires a provisioning XML file since Galleon CLI doesn't support multiple feature packs in a single install command
 
 2. **Update Provisioning Workflows**:
    - Create new jobs or matrix dimensions for each variant
@@ -255,18 +255,24 @@ Starting with WildFly 40, multiple Jakarta EE variants are available. To add the
 
 4. **Example for WildFly 41 with EE10**:
    ```yaml
-   # In wildfly-instances.yaml or a new workflow
-   matrix:
-     version: [41.0.0.Final]
-     variant: [standard, ee10, preview]
-   
    # Provision step would use:
-   # wildfly#41.0.0.Final (standard)
-   # org.wildfly:wildfly-ee-10-feature-pack:41.0.0.Final org.wildfly:wildfly-galleon-pack:41.0.0.Final (ee10)
-   # wildfly-preview#41.0.0.Final (preview)
+   # Standard: ./galleon/bin/galleon.sh install wildfly#41.0.0.Final --dir=wildfly
+   # Preview: ./galleon/bin/galleon.sh install wildfly-preview#41.0.0.Final --dir=wildfly
+   # EE10: Requires provisioning.xml file
    ```
    
-   **Note**: EE10 provisioning requires both feature packs in the correct order (wildfly-ee-10-feature-pack first, then wildfly-galleon-pack).
+   **EE10 Provisioning Example**:
+   ```bash
+   cat > provisioning.xml << 'EOF'
+   <installation xmlns="urn:jboss:galleon:provisioning:3.0">
+       <feature-pack location="org.wildfly:wildfly-ee-10-feature-pack:41.0.0.Final"/>
+       <feature-pack location="org.wildfly:wildfly-galleon-pack:41.0.0.Final"/>
+   </installation>
+   EOF
+   ./galleon/bin/galleon.sh provision provisioning.xml --dir=wildfly
+   ```
+   
+   **Note**: EE10 provisioning requires both feature packs in the correct order (wildfly-ee-10-feature-pack first, then wildfly-galleon-pack). Galleon CLI doesn't support multiple feature packs in a single install command, so a provisioning XML file is required.
 
 ### Version-Specific Variant Support
 
