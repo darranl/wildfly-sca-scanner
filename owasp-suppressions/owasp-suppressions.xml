@@ -532,6 +532,30 @@
     <cve>CVE-2026-34479</cve>
     <cve>CVE-2026-34477</cve>
   </suppress>
+  <suppress until="2027-07-15">
+    <notes><![CDATA[
+    file name: log4j-api-2.25.4.jar
+
+    [Issue #78] WildFly only includes log4j-api (the API layer), not the affected implementation components.
+    CVE-2026-49844: Improper encoding of non-finite floating-point values in MapMessage.asJson()
+    produces invalid JSON output. This is a follow-up to CVE-2026-34481 (already suppressed in Issue #59).
+
+    Exploitation requires:
+    1. Application uses JsonTemplateLayout with message resolver OR MapMessage.asJson()
+    2. Application logs MapMessage containing attacker-controlled floating-point values (NaN, Infinity, -Infinity)
+
+    WildFly does not use log4j-layout-template-json, log4j-core, JsonTemplateLayout, or MapMessage.asJson().
+    WildFly's default logging uses PatternLayout, not JsonTemplateLayout.
+
+    Fixed in log4j-api 2.25.5 and 2.26.1.
+
+    https://github.com/wildfly-security/wildfly-sca-scanner/issues/78
+    https://logging.apache.org/security.html#CVE-2026-49844
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j-api@.*$</packageUrl>
+    <cve>CVE-2026-49844</cve>
+  </suppress>
+
   <suppress until="2027-06-08">
     <notes><![CDATA[
     file names: relaxng-datatype-4.0.8.jar, rngom-4.0.8.jar
