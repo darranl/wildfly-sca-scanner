@@ -640,7 +640,6 @@
     <cve>CVE-2025-27427</cve>
     <cve>CVE-2026-32642</cve>
   </suppress>
-</suppressions>
   <suppress until="2027-07-14">
     <notes><![CDATA[
     file name: httpcore-4.4.16.jar, httpcore-nio-4.4.16.jar
@@ -677,4 +676,4 @@
     <packageUrl regex="true">^pkg:maven/org\.apache\.kafka/kafka-clients@.*$</packageUrl>
     <cve>CVE-2026-41115</cve>
   </suppress>
-
+</suppressions>
