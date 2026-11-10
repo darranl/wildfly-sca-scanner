@@ -661,16 +661,80 @@ suppressions:
   until: '2027-07-14'
 - id: orgapachekafka-kafka-clients-cve-2026-41115
   type: cve-triage
-  notes: "file name: kafka-clients-4.2.1.jar\n\n    [WFLY-22072] CVE-2026-41115 is an improper authorization issue in Apache\
-    \ Kafka's\n    CONSUMER_GROUP_DESCRIBE API. This is primarily a documentation/configuration issue\n    rather than a code\
-    \ vulnerability. The implementation validates DESCRIBE permission\n    (which is correct), but documentation originally\
-    \ stated it should validate READ\n    permission. Apache's resolution is to update documentation to match implementation.\n\
-    \    \n    CVSS: 4.3 MEDIUM (low severity, information disclosure only)\n    Impact: Users with DESCRIBE permission can\
-    \ access consumer group metadata\n    \n    This affects Kafka server operations and ACL configuration, not the kafka-clients\n\
-    \    library functionality that WildFly depends on. The fix will be in Kafka 4.3.1+."
+  notes: |-
+    file name: kafka-clients-4.2.1.jar, kafka-clients-4.2.2.jar
+
+        [WFLY-22072] [Issue #88] CVE-2026-41115 concerns the Kafka broker's
+        CONSUMER_GROUP_DESCRIBE authorization and ACL configuration. The broker correctly
+        checks DESCRIBE GROUP; the documentation incorrectly specified READ GROUP and has
+        been corrected. Broker operators should review their ACLs.
+
+        The authorization decision is performed by the broker, not kafka-clients, so this
+        CVE does not apply to the client library at any version. WildFly ships the client,
+        not the broker. Retain this package URL rule for identified Maven artifacts; the
+        following file path rule covers client JARs whose package URL is missing.
+
+        https://kafka.apache.org/community/cve-list/#cve-2026-41115
+        https://github.com/wildfly-security/wildfly-sca-scanner/issues/88
   match:
     package-url: ^pkg:maven/org\.apache\.kafka/kafka-clients@.*$
   suppress:
     cves:
     - CVE-2026-41115
   until: '2027-07-14'
+  references:
+  - https://kafka.apache.org/community/cve-list/#cve-2026-41115
+  - https://github.com/wildfly-security/wildfly-sca-scanner/issues/88
+- id: kafka-clients-jar-cve-2026-41115
+  type: cve-triage
+  notes: |-
+    file name: kafka-clients-4.2.2.jar
+
+        [Issue #88] CVE-2026-41115 concerns authorization and ACL configuration on the
+        Kafka broker, not the kafka-clients library shipped by WildFly. The broker's
+        DESCRIBE GROUP check is correct; Apache has corrected the documentation and
+        recommends reviewing broker ACLs. No client library version is affected.
+
+        Upstream scans do not resolve a Maven package URL for this client JAR, so the
+        package URL suppression cannot match. Match the kafka-clients JAR filename as
+        a fallback, keeping the suppression limited to the client and this CVE.
+
+        https://kafka.apache.org/community/cve-list/#cve-2026-41115
+        https://github.com/wildfly-security/wildfly-sca-scanner/issues/88
+  match:
+    file-path: ^.*[/\\]kafka-clients-[^/\\]+\.jar$
+  suppress:
+    cves:
+    - CVE-2026-41115
+  until: '2027-11-10'
+  references:
+  - https://kafka.apache.org/community/cve-list/#cve-2026-41115
+  - https://github.com/wildfly-security/wildfly-sca-scanner/issues/88
+- id: ioopentelemetry-opentelemetry-api-incubatorcontextexporter-c
+  type: cve-triage
+  notes: |-
+    file name: opentelemetry-api-1.48.0.jar, opentelemetry-api-incubator-1.48.0-alpha.jar,
+        opentelemetry-context-1.48.0.jar, opentelemetry-exporter-common-1.48.0.jar,
+        opentelemetry-sdk-1.48.0.jar
+
+        [Issue #89] CVE-2026-54285 affects baggage parsing in the JavaScript npm package
+        @opentelemetry/core, not the separate OpenTelemetry Java implementation shipped
+        by WildFly. The scanner incorrectly maps these Java Maven artifacts to a Node.js
+        OpenTelemetry CPE.
+
+        The existing CPE suppression covers io.opentelemetry.* Maven subgroups, but not
+        the base io.opentelemetry group used by these JARs. Suppress only this JavaScript
+        CVE on the listed Java artifacts rather than broadening the product-wide CPE
+        suppression, preserving reporting of Java-specific CVEs such as CVE-2026-45292.
+
+        https://github.com/open-telemetry/opentelemetry-js/security/advisories/GHSA-8988-4f7v-96qf
+        https://github.com/wildfly-security/wildfly-sca-scanner/issues/89
+  match:
+    package-url: ^pkg:maven/io\.opentelemetry/opentelemetry-(api(-incubator)?|context|exporter-common|sdk)@.*$
+  suppress:
+    cves:
+    - CVE-2026-54285
+  until: '2027-11-10'
+  references:
+  - https://github.com/open-telemetry/opentelemetry-js/security/advisories/GHSA-8988-4f7v-96qf
+  - https://github.com/wildfly-security/wildfly-sca-scanner/issues/89
