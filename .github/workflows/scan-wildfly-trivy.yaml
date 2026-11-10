@@ -1,0 +1,117 @@
+name: WildFly Scan (Trivy)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "18 6 * * *"
+
+jobs:
+  scan-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      max-parallel: 1
+      matrix:
+        version: [41.0.1.Final, 41.0.1.Final-EE10, 41.0.1.Final-Preview,
+                  standard-upstream, preview-upstream,
+                  standard-maintenance, ee10-maintenance, preview-maintenance]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+
+      - name: Cache WildFly Installation
+        if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
+        id: wildfly-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
+        with:
+          path: ${{ github.workspace }}/wildfly
+          key: wildfly-${{ matrix.version }}
+          restore-keys: wildfly-${{ matrix.version }}-
+          fail-on-cache-miss: true
+
+      - name: Cache Trivy DB
+        if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
+        with:
+          path: ~/.cache/trivy
+          key: trivy-db-${{ strategy.job-index }}
+          restore-keys: trivy-db-
+
+      - name: Preliminary Trivy Scan (discover packages)
+        if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25  # v0.36.0
+        with:
+          scan-type: 'rootfs'
+          scan-ref: 'wildfly'
+          format: 'json'
+          output: 'trivy-preliminary.json'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Setup Java
+        if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3  # v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: 'suppressions-tool/pom.xml'
+
+      - name: Build suppressions tool
+        if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
+        run: mvn -f suppressions-tool/pom.xml package -q -DskipTests
+
+      - name: Resolve wildcard suppressions
+        if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
+        run: |
+          java -jar suppressions-tool/target/suppressions-tool-1.0.0-SNAPSHOT.jar resolve \
+            suppressions/suppressions.yaml \
+            trivy-preliminary.json \
+            suppressions/.trivyignore-resolved.yaml
+
+      - name: Run Trivy Scan (SARIF)
+        id: trivy-sarif
+        if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25  # v0.36.0
+        with:
+          scan-type: 'rootfs'
+          scan-ref: 'wildfly'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+          trivyignores: 'suppressions/.trivyignore-resolved.yaml'
+
+      - name: Upload SARIF to Code Scanning
+        if: ${{ !cancelled() && steps.trivy-sarif.outcome == 'success' && (!contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF') }}
+        uses: github/codeql-action/upload-sarif@4bfa242aa49c5f7c6770b98670d354a7dfac05f8  # v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+          category: 'trivy-${{ matrix.version }}'
+
+      - name: Run Trivy Scan (JSON)
+        if: ${{ !contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF' }}
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25  # v0.36.0
+        with:
+          scan-type: 'rootfs'
+          scan-ref: 'wildfly'
+          format: 'json'
+          output: 'trivy-results.json'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+          trivyignores: 'suppressions/.trivyignore-resolved.yaml'
+
+      - name: Upload Scan Results
+        if: ${{ success() && (!contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF') }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        with:
+          name: trivy-scan-results-${{ matrix.version }}
+          path: |
+            trivy-results.sarif
+            trivy-results.json
+
+      - name: Upload Log File
+        if: ${{ failure() && (!contains(matrix.version, 'maintenance') || vars.MAINTENANCE_CI != 'OFF') }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        with:
+          name: trivy-log-files-${{ matrix.version }}
+          path: ${{ github.workspace }}/**/*.log
