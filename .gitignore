@@ -9,5 +9,7 @@ galleon
 galleon.zip
 owasp-database
 unzip.log
-wildfly
+/wildfly
+.trivyignore-resolved.yaml
+suppressions-tool/target/
 .claude
