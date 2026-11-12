@@ -68,27 +68,6 @@ jobs:
           path: ${{ github.workspace }}/wildfly
           key: wildfly-standard-${{ matrix.version}}-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: Provision WildFly EE10
-        if: ${{ matrix.version == 'maintenance' && vars.MAINTENANCE_CI != 'OFF' }}
-        run: |
-          rm -rf -- "${{ github.workspace }}/wildfly"
-          cat > provisioning.xml << 'EOF'
-          <installation xmlns="urn:jboss:galleon:provisioning:3.0">
-              <feature-pack location="org.wildfly:wildfly-ee-10-feature-pack:${{ steps.wildfly-nightly.outputs.wildfly-version }}"/>
-              <feature-pack location="org.wildfly:wildfly-galleon-pack:${{ steps.wildfly-nightly.outputs.wildfly-version }}"/>
-          </installation>
-          EOF
-          ./galleon/bin/galleon.sh provision provisioning.xml --dir=wildfly
-
-      # Cache the installation
-      - name: Cache WildFly EE10 Installation
-        if: ${{ matrix.version == 'maintenance' && vars.MAINTENANCE_CI != 'OFF' }}
-        id: wildfly-ee10-cache
-        uses: actions/cache/save@v4
-        with:
-          path: ${{ github.workspace }}/wildfly
-          key: wildfly-ee10-${{ matrix.version}}-${{ github.run_id }}-${{ github.run_attempt }}
-
       - name: Provision WildFly Preview
         if: ${{ matrix.version != 'maintenance' || vars.MAINTENANCE_CI != 'OFF' }}
         run: |

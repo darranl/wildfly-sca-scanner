@@ -43,7 +43,7 @@ Four workflows provision different WildFly distributions and cache them for scan
 
 **WildFly EE10 Maintenance** (`wildfly-ee10-instances.yaml`) provisions WildFly EE10 distributions (Jakarta EE 10 compatibility). Versions are defined in its `matrix.version` array. Cached with key `wildfly-{VERSION}-EE10`. EE10 provisioning requires a `provisioning.xml` file with two feature packs (`wildfly-ee-10-feature-pack` first, then `wildfly-galleon-pack`) because Galleon CLI does not support multiple feature packs in a single install command.
 
-**WildFly Nightly Maintenance** (`wildfly-nightly.yaml`) downloads and provisions nightly builds from WildFly CI (`ci.wildfly.org`). The matrix includes `upstream` (main branch) and `maintenance` (maintenance branch) entries. The `UPSTREAM_CI` and `MAINTENANCE_CI` repository variables map these to CI job names. Setting `MAINTENANCE_CI` to `'OFF'` disables maintenance branch scanning. Each nightly run provisions standard and preview distributions, plus EE10 for the maintenance branch, cached with unique keys incorporating the run ID (e.g. `wildfly-standard-{VERSION}-{RUN_ID}-{ATTEMPT}`).
+**WildFly Nightly Maintenance** (`wildfly-nightly.yaml`) downloads and provisions nightly builds from WildFly CI (`ci.wildfly.org`). The matrix includes `upstream` (main branch) and `maintenance` (maintenance branch) entries. The `UPSTREAM_CI` and `MAINTENANCE_CI` repository variables map these to CI job names. Setting `MAINTENANCE_CI` to `'OFF'` disables maintenance branch scanning. Each nightly run provisions standard and preview distributions, cached with unique keys incorporating the run ID (e.g. `wildfly-standard-{VERSION}-{RUN_ID}-{ATTEMPT}`).
 
 ### Security Scanning
 
@@ -103,7 +103,6 @@ The naming conventions for scan matrix entries are:
 - Released preview: `VERSION-Preview`
 - Released EE10: `VERSION-EE10`
 - Nightly standard: `standard-upstream`, `standard-maintenance`
-- Nightly EE10: `ee10-maintenance`
 - Nightly preview: `preview-upstream`, `preview-maintenance`
 
 ## Suppressions
@@ -122,7 +121,7 @@ The workflows use GitHub Actions caching to avoid redundant downloads and provis
 
 - **Tool caches** (`dependency-check-{VERSION}`, `galleon-{VERSION}`): stable, persist until the tool version changes
 - **Released WildFly caches** (`wildfly-{VERSION}`, `wildfly-{VERSION}-Preview`, `wildfly-{VERSION}-EE10`): stable, persist until the WildFly version is removed from the matrix
-- **Nightly WildFly caches** (`wildfly-{standard|ee10|preview}-{upstream|maintenance}-{RUN_ID}-{ATTEMPT}`): rotate daily, each run creates a new cache
+- **Nightly WildFly caches** (`wildfly-{standard|preview}-{upstream|maintenance}-{RUN_ID}-{ATTEMPT}`): rotate daily, each run creates a new cache
 - **Database cache** (`owasp-database-{RUN_ID}-{ATTEMPT}[-{JOB_INDEX}]`): rolling, restored by prefix and saved with a unique key after each update
 
 ## Artifacts
