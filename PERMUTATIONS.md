@@ -18,9 +18,9 @@ Only the latest released version is scanned with all available distributions. Ol
 | Branch | Standard | EE10 | Preview |
 |--------|----------|------|---------|
 | Upstream (main) | Yes | | Yes |
-| Maintenance | Yes | Yes | Yes |
+| Maintenance | Yes | | Yes |
 
-EE10 has been removed from upstream WildFly and is only present on the maintenance branch.
+EE10 has been removed from both upstream and maintenance nightly builds. Released EE10 distributions listed above remain scanned.
 
 ## Scan Matrix Entries
 
@@ -35,4 +35,4 @@ The `scan-wildfly.yaml` workflow uses the following matrix entries, each corresp
 
 **Nightly builds:**
 - `standard-upstream`, `preview-upstream` — upstream branch
-- `standard-maintenance`, `ee10-maintenance`, `preview-maintenance` — maintenance branch
+- `standard-maintenance`, `preview-maintenance` — maintenance branch

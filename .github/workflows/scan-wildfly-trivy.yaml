@@ -17,7 +17,7 @@ jobs:
       matrix:
         version: [41.0.1.Final, 41.0.1.Final-EE10, 41.0.1.Final-Preview,
                   standard-upstream, preview-upstream,
-                  standard-maintenance, ee10-maintenance, preview-maintenance]
+                  standard-maintenance, preview-maintenance]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
 
